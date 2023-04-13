@@ -1,10 +1,22 @@
 import pandas as pd
 
-# lista de fechas
-fechas = ['2022-01-01', '2022-02-01', '2022-03-01', '2022-04-01', '2022-05-01']
+def cambiar_formato_fecha(fecha):
+    return fecha.strftime('%d-%m-%Y')
 
-# crear un DataFrame de pandas con las fechas
-df = pd.DataFrame({'Fechas': fechas})
+def cambiar_valores(valor):
+    if valor == 'A':
+        return 'Funcionalidad Planificada'
+    elif valor == 'B':
+        return 'Tarea Planificada'
+    elif valor == 'C':
+        return 'Tarea No Planificada'
+    else:
+        return valor
 
-# guardar el DataFrame en un archivo de Excel
-df.to_excel('fechas.xlsx', index=False)
+df = pd.read_excel("C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx")
+
+df['fecha'] = df['fecha'].apply(cambiar_formato_fecha)
+df['estado'] = df['estado'].apply(cambiar_valores)
+df['tipo_incidencia'] = df['tipo_incidencia'].apply(cambiar_valores)
+
+df.to_excel("C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx", index=False)
