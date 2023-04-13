@@ -1,23 +1,39 @@
 import pandas as pd
 
-def cambiar_formato_fecha(fecha):
-    return fecha.strftime('%d-%m-%Y')
+def change_date_format(df, column_name):
+    # Cambia el formato de fecha en un dataframe Pandas a dd/mm/yyyy.
+    df[column_name] = pd.to_datetime(df[column_name]).dt.strftime('%d/%m/%Y')
+    return df
 
-def cambiar_valores(valor):
-    if valor == 'Funcionalidad Planificada':
-        return 'A'
-    elif valor == 'Tarea Planificada':
-        return 'B'
-    elif valor == 'Tarea No Planificada':
-        return 'C'
-    else:
-        return valor
+def change_estado(df, column_name):
+    # Cambia los valores de Estado en un dataframe Pandas.
+    df[column_name] = df[column_name].apply(lambda x: 'Funcionalidad Planificada' if x == 'Planificada' else 'Funcionalidad No Planificada')
+    return df
 
-df = pd.read_excel(r"C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx")
+def change_tipo_incidencia(df, column_name):
+    # Cambia los valores de Tipo de Incidencia en un dataframe Pandas.
+    df[column_name] = df[column_name].apply(lambda x: 'Tarea Planificada' if x == 'Tarea Planificada' else 'Tarea No Planificada')
+    return df
 
+def save_dataframe_to_excel(df, excel_filename):
+    # Guarda un dataframe Pandas en un archivo Excel.
+    df.to_excel(excel_filename, index=False)
 
-df['fecha'] = df['fecha'].apply(cambiar_formato_fecha)
-df['estado'] = df['estado'].apply(cambiar_valores)
-df['tipo_incidencia'] = df['tipo_incidencia'].apply(cambiar_valores)
+def main():
+    # Leer el archivo Excel
+    df = pd.read_excel("C:/Work/jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx")
 
-df.to_excel(r"C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx", index=False)
+    # Cambiar el formato de la fecha
+    df = change_date_format(df, 'Fecha')
+
+    # Cambiar los valores de Estado
+    df = change_estado(df, 'Estado')
+
+    # Cambiar los valores de Tipo de Incidencia
+    df = change_tipo_incidencia(df, 'Tipo de Incidencia')
+
+    # Guardar el archivo Excel modificado
+    save_dataframe_to_excel(df, "C:/Work/jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx")
+
+if __name__ == '__main__':
+    main()
