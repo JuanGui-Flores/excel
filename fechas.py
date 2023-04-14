@@ -1,7 +1,27 @@
+import argparse
 import openpyxl
 
+# OBSERVACIONES:
+# El archivo de salida siempre tiene que ser .csv no .xlsx. El de entrada no importa realmente, jira puede exportar como sea 🗸
+# Poder escribir un comando para pasar por argumento el archivo de entrada y el de salida tipo: fechas.py -i archivo.xlsx -o archivo.csv 🗸
+
+# TODO:
+# Refactorizar la funcion actualizarFila para que sea mas escalable separando el codigo en funciones. (es probable que necesitemos actualizar mas columnas en el futuro) 
+# Añadir excepciones especificas en caso de necesitar instrucciones para esa excepcion en concreto ej: FileNotFoundError(asegurese de que el archivo existe),  etc
+# Añadir formato de fecha de columna "Creada"
+# Añadir opcion de ignorar las columnas no existentes ej si no existe la columna de tipo de incidencia, que no de error y que siga con el resto de columnas
+
+
+# Definir argumentos de línea de comandos
+parser = argparse.ArgumentParser(description='Actualizar archivo Excel')
+parser.add_argument('-i', '--input', type=str, help='Archivo de entrada (formato .xlsx)', required=True)
+parser.add_argument('-o', '--output', type=str, help='Archivo de salida (formato .csv)', required=True)
+args = parser.parse_args()
+
 # Configuración
-archivoExcel = "C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx"
+
+archivoExcel = args.input
+archivoCSV = args.output
 columnaFechaVencimiento = 'Fecha de vencimiento'
 columnaEstado = 'Estado'
 valorEstadoProduccion = 'PRODUCCION'
@@ -19,6 +39,9 @@ def formatearFecha(fecha):
 
 # Función para actualizar una fila de datos
 def actualizarFila(fila):
+
+    # Separar cada codigo de cambio de celdas en funciones distintas para mejorar escalabilidad del codigo. ej formatearFecha, formatearEstado, etc
+
     # Cambiar el formato de la fecha
     fechaActualizada = fila[worksheet[columnaFechaVencimiento].column_letter + str(fila.row)].value
     fila[worksheet[columnaFechaVencimiento].column_letter + str(fila.row)].value = formatearFecha(fechaActualizada)
@@ -50,10 +73,8 @@ try:
         actualizarFila(row)
 
     # Guardar el archivo Excel actualizado
-    newArchivoExcel = archivoExcel.replace('.xlsx', "C:\Work\jira-search-0b651e7f-5ce9-4912-9e53-c9a4cbd42e77.xlsx")
-    workbook.save(newArchivoExcel)
+    workbook.save(archivoCSV)
+    print(f"Archivo {archivoCSV} actualizado con éxito!")
 
-    print(f"Archivo {newArchivoExcel} actualizado con éxito!")
-
-except Exception as e:
+except Exception as e: # Muy buena practica el manejo de excepciones
     print(f"Error al actualizar el archivo Excel: {str(e)}")
