@@ -2,7 +2,7 @@ import argparse
 import openpyxl
 from datetime import datetime
 
-# Definir argumentos de línea de comandos
+# Definir argumentos de línea de comandoss
 parser = argparse.ArgumentParser(description='Actualizar archivo Excel')
 parser.add_argument('-i', '--input', type=str, help='Archivo de entrada (formato .xlsx)', required=True)
 parser.add_argument('-o', '--output', type=str, help='Archivo de salida (formato .csv)', required=True)
