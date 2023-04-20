@@ -36,7 +36,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv):
 
     try:
         # Leer el archivo Excel
-        workbook = openpyxl.load_workbook(archivo_excel)
+        workbook = openpyxl.load_workbook("C:\Work\jira.xlsx")
 
         # Seleccionar la hoja de trabajo
         worksheet = workbook.active
