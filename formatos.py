@@ -1,6 +1,7 @@
 import openpyxl
 from datetime import datetime
 
+
 def actualizar_archivo_excel(archivo_excel, archivo_csv):
     # Configuración
     COLUMNAS = {
@@ -31,7 +32,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv):
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia):
         if tipo_incidencia not in TIPOS_INCIDENCIA_VALIDOS:
-            raise ValueError(f'Tipo de incidencia no válida: {tipo_incidencia}')
+            raise ValueError(
+                f'Tipo de incidencia no válida: {tipo_incidencia}')
         return tipo_incidencia
 
     try:
@@ -45,7 +47,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv):
         for row in worksheet.iter_rows(min_row=2):
             # Cambiar el formato de la fecha
             fecha_actualizada = row[COLUMNAS['fecha_vencimiento']].value
-            row[COLUMNAS['fecha_vencimiento']].value = formatear_fecha(fecha_actualizada)
+            row[COLUMNAS['fecha_vencimiento']
+                ].value = formatear_fecha(fecha_actualizada)
 
             # Cambiar el estado de la tarea
             estado = row[COLUMNAS['estado']].value
@@ -54,7 +57,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv):
             # Cambiar el tipo de incidencia si es válido
             tipo_incidencia = row[COLUMNAS['tipo_incidencia']].value
             if tipo_incidencia:
-                row[COLUMNAS['tipo_incidencia']].value = formatear_tipo_incidencia(tipo_incidencia)
+                row[COLUMNAS['tipo_incidencia']
+                    ].value = formatear_tipo_incidencia(tipo_incidencia)
 
         # Guardar el archivo Excel actualizado
         workbook.save(archivo_csv)
