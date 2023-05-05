@@ -2,6 +2,7 @@ import csv
 import openpyxl
 from datetime import datetime
 
+
 def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos, columna_fecha):
     # Función para formatear la fecha
     def formatear_fecha(fecha):
@@ -49,7 +50,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             for row in worksheet.iter_rows(min_row=2):
                 # Cambiar el formato de la fecha
                 fecha_actualizada = row[indice_columnas[columna_fecha]].value
-                row[indice_columnas[columna_fecha]].value = formatear_fecha(fecha_actualizada)
+                row[indice_columnas[columna_fecha]
+                    ].value = formatear_fecha(fecha_actualizada)
 
                 # Cambiar el estado de la tarea
                 estado = row[indice_columnas['estado']].value
@@ -58,10 +60,12 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                 # Cambiar el tipo de incidencia si es válido
                 tipo_incidencia = row[indice_columnas['tipo_incidencia']].value
                 if tipo_incidencia:
-                    row[indice_columnas['tipo_incidencia']].value = formatear_tipo_incidencia(tipo_incidencia)
+                    row[indice_columnas['tipo_incidencia']
+                        ].value = formatear_tipo_incidencia(tipo_incidencia)
 
                 # Escribir fila actualizada en archivo CSV
-                writer.writerow([row[indice_columnas[columna]].value for columna in columnas])
+                writer.writerow(
+                    [row[indice_columnas[columna]].value for columna in columnas])
 
         workbook.save()
         workbook.close()
@@ -73,7 +77,22 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
     except ValueError as error:
         print(f"Error: {error}")
 
+
 # Pedir al usuario las rutas de los archivos y las columnas de interés
 archivo_excel = input("Ingresa la ruta del archivo Excel a actualizar: ")
 archivo_csv = input("Ingresa la ruta del archivo CSV a crear: ")
-
+columnas = {
+    'fecha': 'Fecha',
+    'estado': 'Estado',
+    'tipo_incidencia': 'Tipo de incidencia',
+    'descripcion': 'Descripción'
+}
+estados_validos = {
+    'En progreso': 'En curso',
+    'Cerrada': 'Completada',
+    'Abierta': 'Pendiente'
+}
+tipos_incidencia_validos = ['Error', 'Consulta', 'Solicitud de mejora']
+columna_fecha = 'fecha'
+actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
+                         estados_validos, tipos_incidencia_validos, columna_fecha)
