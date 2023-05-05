@@ -97,4 +97,4 @@ estados_validos = {
 tipos_incidencia_validos = ['Error', 'Consulta', 'Solicitud de mejora']
 columna_fecha = 'fecha'
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
-                         estados_validos, tipos_incidencia_validos, columna_fecha)
+                        estados_validos, tipos_incidencia_validos, columna_fecha)
