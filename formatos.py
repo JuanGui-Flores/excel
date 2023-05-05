@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos, columna_fecha):
+    
     # Función para formatear la fecha
     def formatear_fecha(fecha):
         if isinstance(fecha, datetime):
@@ -48,6 +49,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
+                
                 # Cambiar el formato de la fecha
                 fecha_actualizada = row[indice_columnas[columna_fecha]].value
                 row[indice_columnas[columna_fecha]
