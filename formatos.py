@@ -3,13 +3,13 @@ import openpyxl
 from datetime import datetime
 
 
-def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos, columna_fecha):
-    
-    # Función para formatear la fecha
-    def formatear_fecha(fecha):
-        if isinstance(fecha, datetime):
-            return fecha.strftime('%d%m%Y')
-        return fecha
+def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos, columna_fecha_vencimiento):
+
+    # Función para formatear la fecha de vencimiento
+    def formatear_fecha_vencimiento(fecha_vencimiento):
+        if isinstance(fecha_vencimiento, datetime):
+            return fecha_vencimiento.strftime('%d%m%Y')
+        return fecha_vencimiento
 
     # Función para formatear el estado
     def formatear_estado(estado):
@@ -49,11 +49,11 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
-                
-                # Cambiar el formato de la fecha
-                fecha_actualizada = row[indice_columnas[columna_fecha]].value
-                row[indice_columnas[columna_fecha]
-                    ].value = formatear_fecha(fecha_actualizada)
+
+                # Cambiar el formato de la fecha de vencimiento
+                fecha_vencimiento_actualizada = row[indice_columnas[columna_fecha_vencimiento]].value
+                row[indice_columnas[columna_fecha_vencimiento]
+                    ].value = formatear_fecha_vencimiento(fecha_vencimiento_actualizada)
 
                 # Cambiar el estado de la tarea
                 estado = row[indice_columnas['estado']].value
@@ -84,17 +84,16 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 archivo_excel = input("Ingresa la ruta del archivo Excel a actualizar: ")
 archivo_csv = input("Ingresa la ruta del archivo CSV a crear: ")
 columnas = {
-    'fecha': 'Fecha',
     'estado': 'Estado',
-    'tipo_incidencia': 'Tipo de incidencia',
-    'descripcion': 'Descripción'
+    'tipo_incidencia': 'Tipo de Incidencia',
+    'fecha_vencimiento': 'Fecha de vencimiento'
 }
 estados_validos = {
     'En progreso': 'En curso',
-    'Cerrada': 'Completada',
+    'Cerrada': 'Cerrado',
     'Abierta': 'Pendiente'
 }
 tipos_incidencia_validos = ['Error', 'Consulta', 'Solicitud de mejora']
-columna_fecha = 'fecha'
+columna_fecha_vencimiento = 'fecha_vencimiento'
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
-                        estados_validos, tipos_incidencia_validos, columna_fecha)
+                        estados_validos, tipos_incidencia_validos, columna_fecha_vencimiento)
