@@ -11,6 +11,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             return fecha_vencimiento.strftime('%d%m%Y')
         return fecha_vencimiento
 
+
     # Función para formatear el estado
     def formatear_estado(estado):
         return estados_validos.get(estado, estado)
