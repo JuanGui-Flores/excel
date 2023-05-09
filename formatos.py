@@ -41,7 +41,6 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                 raise ValueError(f'Cabecera no encontrada: {nombre_columna}')
             indice_columnas[columna] = header.index(nombre_columna)
 
-
         # Crear archivo CSV
         with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
