@@ -79,7 +79,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         print(f"Error: El archivo {archivo_excel} no existe.")
     except ValueError as error:
         print(f"Error: {error}")
-
+        
 
 # Pedir al usuario las rutas de los archivos y las columnas de interés
 archivo_excel = input("Ingresa la ruta del archivo Excel a actualizar: ")
