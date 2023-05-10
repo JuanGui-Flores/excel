@@ -40,7 +40,6 @@ def formatearFecha(fecha):
 # Función para actualizar una fila de datos
 def actualizarFila(fila):
 
-    # Separar cada codigo de cambio de celdas en funciones distintas para mejorar escalabilidad del codigo. ej formatearFecha, formatearEstado, etc
 
     # Cambiar el formato de la fecha
     fechaActualizada = fila[worksheet[columnaFechaVencimiento].column_letter + str(fila.row)].value
