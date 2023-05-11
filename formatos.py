@@ -8,9 +8,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
     # Función para formatear la fecha de vencimiento
     def formatear_fecha_vencimiento(fecha_vencimiento):
         if isinstance(fecha_vencimiento, datetime):
-            return fecha_vencimiento.strftime('%d%m%Y')
+            return fecha_vencimiento.strftime('%d-%m-%Y')
         return fecha_vencimiento
-
 
     # Función para formatear el estado
     def formatear_estado(estado):
@@ -21,7 +20,12 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         if tipo_incidencia not in tipos_incidencia_validos:
             raise ValueError(
                 f'Tipo de incidencia no válida: {tipo_incidencia}')
-        return tipo_incidencia
+        if tipo_incidencia == 'Error':
+            return 'bug'
+        elif tipo_incidencia == 'Consulta':
+            return 'tarea'
+        elif tipo_incidencia == 'Solicitud de mejora':
+            return 'subtarea'
 
     try:
         # Leer el archivo Excel
@@ -79,7 +83,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         print(f"Error: El archivo {archivo_excel} no existe.")
     except ValueError as error:
         print(f"Error: {error}")
-        
+
 
 # Pedir al usuario las rutas de los archivos y las columnas de interés
 archivo_excel = input("Ingresa la ruta del archivo Excel a actualizar: ")
