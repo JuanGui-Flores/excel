@@ -3,7 +3,7 @@ import openpyxl
 from datetime import datetime
 
 
-def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos, columna_fecha_vencimiento):
+def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos):
     """
     Actualiza un archivo Excel y crea un archivo CSV con los cambios realizados.
 
@@ -13,7 +13,6 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         columnas (dict): Diccionario que mapea las columnas de interés en el archivo Excel con los nombres correspondientes en el archivo CSV.
         estados_validos (dict): Diccionario que mapea los estados válidos en el archivo Excel a los estados correspondientes en el archivo CSV.
         tipos_incidencia_validos (list): Lista de tipos de incidencia válidos en el archivo Excel.
-        columna_fecha_vencimiento (str): Nombre de la columna que contiene la fecha de vencimiento en el archivo Excel.
     """
     # Función para formatear la fecha de vencimiento
     def formatear_fecha_vencimiento(fecha_vencimiento):
@@ -41,46 +40,55 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         if not (archivo_excel and archivo_csv):
             raise ValueError("Debe proporcionar las rutas de archivo válidas.")
         
-        # Leer el archivo Excel
-        with openpyxl.load_workbook(archivo_excel) as workbook:
-            # Seleccionar la hoja de trabajo
-            worksheet = workbook.active
+        # Cargar el archivo Excel
+        workbook = openpyxl.load_workbook(archivo_excel)
+        
+        # Seleccionar la hoja de trabajo
+        worksheet = workbook.active
 
-            # Buscar las cabeceras de las columnas
-            header_row = next(worksheet.iter_rows(min_row=1, max_row=1))
-            header = [cell.value for cell in header_row]
+        # Buscar las cabeceras de las columnas
+        header_row = next(worksheet.iter_rows(min_row=1, max_row=1))
+        header = [cell.value for cell in header_row]
 
-            # Obtener los índices de las columnas de interés
-            indice_columnas = {}
-            for columna, nombre_columna in columnas.items():
-                if nombre_columna not in header:
-                    raise ValueError(f'Cabecera no encontrada: {nombre_columna}')
-                indice_columnas[columna] = header.index(nombre_columna)
+        # Obtener los índices de las columnas de interés
+        indice_columnas = {}
+        for columna, nombre_columna in columnas.items():
+            if nombre_columna not in header:
+                raise ValueError(f'Cabecera no encontrada: {nombre_columna}')
+            indice_columnas[columna] = header.index(nombre_columna)
 
-            # Crear archivo CSV
-            with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
-                writer = csv.writer(file)
+        # Solicitar al usuario la columna a modificar
+        columna_modificar = input("Ingresa el nombre de la columna a modificar: ")
+        if columna_modificar not in columnas.values():
+            raise ValueError(f'Columna no válida: {columna_modificar}')
 
-                # Escribir cabecera
-                writer.writerow([columnas[columna] for columna in columnas])
+        # Crear archivo CSV
+        with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
 
-                # Iterar sobre las filas y hacer los cambios necesarios
-                for row in worksheet.iter_rows(min_row=2):
-                    # Cambiar el formato de la fecha de vencimiento
-                    fecha_vencimiento_actualizada = row[indice_columnas[columna_fecha_vencimiento]].value
-                    row[indice_columnas[columna_fecha_vencimiento]].value = formatear_fecha_vencimiento(fecha_vencimiento_actualizada)
+            # Escribir cabecera
+            writer.writerow([columnas[columna] for columna in columnas])
 
-                    # Cambiar el estado de la tarea
-                    estado = row[indice_columnas['estado']].value
-                    row[indice_columnas['estado']].value = formatear_estado(estado)
+            # Iterar sobre las filas y hacer los cambios necesarios
+            for row in worksheet.iter_rows(min_row=2):
 
-                    # Cambiar el tipo de incidencia si es válido
-                    tipo_incidencia = row[indice_columnas['tipo_incidencia']].value
-                    if tipo_incidencia:
-                        row[indice_columnas['tipo_incidencia']].value = formatear_tipo_incidencia(tipo_incidencia)
+                # Obtener el valor actualizado de la columna
+                valor_actualizado = row[indice_columnas[columna_modificar]].value
 
-                    # Escribir fila actualizada en archivo CSV
-                    writer.writerow([row[indice_columnas[columna]].value for columna in columnas])
+                # Realizar el formateo correspondiente según la columna
+                if columna_modificar == 'fecha_vencimiento':
+                    row[indice_columnas[columna_modificar]].value = formatear_fecha_vencimiento(valor_actualizado)
+                elif columna_modificar == 'estado':
+                    row[indice_columnas[columna_modificar]].value = formatear_estado(valor_actualizado)
+                elif columna_modificar == 'tipo_incidencia':
+                    if valor_actualizado:
+                        row[indice_columnas[columna_modificar]].value = formatear_tipo_incidencia(valor_actualizado)
+
+                # Escribir fila actualizada en archivo CSV
+                writer.writerow([row[indice_columnas[columna]].value for columna in columnas])
+
+        workbook.save(archivo_excel)
+        workbook.close()
 
         print(f"Archivo {archivo_csv} actualizado con éxito!")
 
@@ -104,6 +112,6 @@ estados_validos = {
     'Abierta': 'Pendiente'
 }
 tipos_incidencia_validos = ['Error', 'Consulta', 'Solicitud de mejora']
-columna_fecha_vencimiento = 'fecha_vencimiento'
+
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
-                        estados_validos, tipos_incidencia_validos, columna_fecha_vencimiento)
+                        estados_validos, tipos_incidencia_validos)
