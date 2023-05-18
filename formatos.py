@@ -15,10 +15,10 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         tipos_incidencia_validos (list): Lista de tipos de incidencia válidos en el archivo Excel.
     """
     # Función para formatear la fecha de vencimiento
-    def formatear_fecha_vencimiento(fecha_vencimiento):
-        if isinstance(fecha_vencimiento, datetime):
-            return fecha_vencimiento.strftime('%d-%m-%Y')
-        return fecha_vencimiento
+    def formatear_fecha_fin(fecha_fin):
+        if isinstance(fecha_fin, datetime):
+            return fecha_fin.strftime('%d-%m-%Y')
+        return fecha_fin
 
     # Función para formatear el estado
     def formatear_estado(estado):
@@ -76,8 +76,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                 valor_actualizado = row[indice_columnas[columna_modificar]].value
 
                 # Realizar el formateo correspondiente según la columna
-                if columna_modificar == 'fecha_vencimiento':
-                    row[indice_columnas[columna_modificar]].value = formatear_fecha_vencimiento(valor_actualizado)
+                if columna_modificar == 'fecha_fin':
+                    row[indice_columnas[columna_modificar]].value = formatear_fecha_fin(valor_actualizado)
                 elif columna_modificar == 'estado':
                     row[indice_columnas[columna_modificar]].value = formatear_estado(valor_actualizado)
                 elif columna_modificar == 'tipo_incidencia':
