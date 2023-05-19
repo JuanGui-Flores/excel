@@ -83,6 +83,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                 elif columna_modificar == 'tipo_incidencia':
                     if valor_actualizado:
                         row[indice_columnas[columna_modificar]].value = formatear_tipo_incidencia(valor_actualizado)
+                elif columna_modificar == 'prioridad':  
+                    row[indice_columnas[columna_modificar]].value = 'Media'
 
                 # Escribir fila actualizada en archivo CSV
                 writer.writerow([row[indice_columnas[columna]].value for columna in columnas])
@@ -104,7 +106,8 @@ archivo_csv = input("Ingresa la ruta del archivo CSV a crear: ")
 columnas = {
     'estado': 'Estado',
     'tipo_incidencia': 'Tipo de Incidencia',
-    'fecha_vencimiento': 'Fecha de vencimiento'
+    'fecha_vencimiento': 'Fecha de vencimiento',
+    'prioridad': 'Prioridad'  
 }
 estados_validos = {
     'En progreso': 'En curso',
