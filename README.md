@@ -23,6 +23,7 @@ Puedes personalizar la configuración del script editando el archivo `actualizar
 - `columnas`: Mapea las columnas de interés en el archivo Excel con los nombres correspondientes en el archivo CSV.
 - `estados_validos`: Define los estados válidos en el archivo Excel y sus equivalentes en el archivo CSV.
 - `tipos_incidencia_validos`: Define los tipos de incidencia válidos en el archivo Excel.
+- `prioridad`: define el tipo de prioridad que se le da a una tarea.
 
 Asegúrate de guardar los cambios y reiniciar el script después de realizar modificaciones en la configuración.
 
