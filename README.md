@@ -32,7 +32,7 @@ Asegúrate de guardar los cambios y reiniciar el script después de realizar mod
 Si deseas contribuir a este proyecto, ¡eres bienvenido! Puedes hacerlo siguiendo estos pasos:
 
 1. Realiza un fork de este repositorio.
-2. Crea una rama con tu nueva funcionalidad: `git checkout -b nueva-funcionalidad`.
+2. Crea una rama con tu nueva funcionalidad: `git checkout -b`.
 3. Realiza tus cambios y realiza confirmaciones significativas: `git commit -am 'Añadir nueva funcionalidad'`.
-4. Empuja tu rama a tu repositorio remoto: `git push origin nueva-funcionalidad`.
+4. Empuja tu rama a tu repositorio remoto.
 5. Abre un pull request en este repositorio.
