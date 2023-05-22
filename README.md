@@ -10,7 +10,7 @@ Este proyecto consiste en una utilidad para actualizar un archivo Excel y crear 
 
 ## Uso
 
-1. Ejecuta el script `pyython <nombre del archivo>.py` en tu entorno de Python.
+1. Ejecuta el script `python <nombre del archivo>.py` en tu entorno de Python.
 2. Se te pedirá que ingreses la ruta del archivo Excel a actualizar y la ruta del archivo CSV a crear.
 3. A continuación, se te solicitará ingresar el nombre de la columna que deseas modificar.
 4. Ingresa la prioridad requerida cuando se te solicite.
