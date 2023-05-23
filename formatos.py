@@ -14,7 +14,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         estados_validos (dict): Diccionario que mapea los estados válidos en el archivo Excel a los estados correspondientes en el archivo CSV.
         tipos_incidencia_validos (list): Lista de tipos de incidencia válidos en el archivo Excel.
     """
-    
+
     # Función para formatear la fecha de vencimiento
     def formatear_fecha_fin(fecha_fin):
         if isinstance(fecha_fin, datetime):
@@ -28,7 +28,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario):
         if tipo_incidencia not in tipos_incidencia_validos:
-            raise ValueError(f'Tipo de incidencia no válida: {tipo_incidencia}')
+            raise ValueError(
+                f'Tipo de incidencia no válida: {tipo_incidencia}')
         if tipo_incidencia == 'Error':
             return 'bug'
         elif tipo_incidencia == 'Consulta':
@@ -42,10 +43,10 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         # Validar la existencia de los archivos
         if not (archivo_excel and archivo_csv):
             raise ValueError("Debe proporcionar las rutas de archivo válidas.")
-        
+
         # Cargar el archivo Excel
         workbook = openpyxl.load_workbook(archivo_excel)
-        
+
         # Seleccionar la hoja de trabajo
         worksheet = workbook.active
 
@@ -61,9 +62,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             indice_columnas[columna] = header.index(nombre_columna)
 
         # Pedir al usuario la columna a modificar
-        columna_modificar = input("Ingresa el nombre de la columna a modificar: ")
-        if columna_modificar not in columnas.values():
-            raise ValueError(f'Columna no válida: {columna_modificar}')
+        columnas_modificar = list(columnas.values())
 
         # Pedir al usuario la prioridad
         prioridad_usuario = input("Ingresa la prioridad: ")
@@ -78,28 +77,34 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
 
-                # Obtener el valor actualizado de la columna
-                valor_actualizado = row[indice_columnas[columna_modificar]].value
+                # Iterar sobre las columnas y aplicar los cambios necesarios
+                for columna_modificar in columnas_modificar:
+                    # Obtener el valor actualizado de la columna
+                    valor_actualizado = row[indice_columnas[columna_modificar]].value
 
-                # Realizar el formateo correspondiente según la columna
-                if columna_modificar == 'fecha_fin':
-                    row[indice_columnas[columna_modificar]].value = formatear_fecha_fin(valor_actualizado)
-                elif columna_modificar == 'estado':
-                    row[indice_columnas[columna_modificar]].value = formatear_estado(valor_actualizado)
-                elif columna_modificar == 'tipo_incidencia':
-                    if valor_actualizado:
-                        row[indice_columnas[columna_modificar]].value = formatear_tipo_incidencia(valor_actualizado, prioridad_usuario)
-                elif columna_modificar == 'prioridad':
-                    row[indice_columnas[columna_modificar]].value = prioridad_usuario
+                    # Realizar el formateo correspondiente según la columna
+                    if columna_modificar == 'fecha_vencimiento':
+                        row[indice_columnas[columna_modificar]
+                            ].value = formatear_fecha_fin(valor_actualizado)
+                    elif columna_modificar == 'estado':
+                        row[indice_columnas[columna_modificar]
+                            ].value = formatear_estado(valor_actualizado)
+                    elif columna_modificar == 'tipo_incidencia':
+                        if valor_actualizado:
+                            row[indice_columnas[columna_modificar]].value = formatear_tipo_incidencia(
+                                valor_actualizado, prioridad_usuario)
+                    elif columna_modificar == 'prioridad':
+                        row[indice_columnas[columna_modificar]
+                            ].value = prioridad_usuario
 
                 # Escribir fila actualizada en archivo CSV
-                writer.writerow([row[indice_columnas[columna]].value for columna in columnas])
+                writer.writerow(
+                    [row[indice_columnas[columna]].value for columna in columnas])
 
         workbook.save(archivo_excel)
         workbook.close()
 
-        print(f"Archivo {archivo_csv} actualizado con éxito!"
-              )
+        print(f"Archivo {archivo_csv} actualizado con éxito!")
 
     except FileNotFoundError:
         print(f"Error: El archivo {archivo_excel} no existe.")
@@ -121,7 +126,8 @@ estados_validos = {
     'Cerrada': 'Cerrado',
     'Abierta': 'Pendiente'
 }
-tipos_incidencia_validos = ['Error', 'Consulta', 'Solicitud de mejora', 'Requerimiento']
+tipos_incidencia_validos = ['Error', 'Consulta',
+                            'Solicitud de mejora', 'Requerimiento']
 
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
-                        estados_validos, tipos_incidencia_validos)
+                         estados_validos, tipos_incidencia_validos)
