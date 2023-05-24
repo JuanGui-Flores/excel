@@ -15,15 +15,18 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         tipos_incidencia_validos (list): Lista de tipos de incidencia válidos en el archivo Excel.
     """
 
+
     # Función para formatear la fecha de vencimiento
     def formatear_fecha_fin(fecha_fin):
         if isinstance(fecha_fin, datetime):
             return fecha_fin.strftime('%d-%m-%Y')
         return fecha_fin
 
+
     # Función para formatear el estado
     def formatear_estado(estado):
         return estados_validos.get(estado, estado)
+
 
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario):
@@ -39,20 +42,25 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         elif tipo_incidencia == 'Requerimiento':
             return prioridad_usuario
 
+
     try:
         # Validar la existencia de los archivos
         if not (archivo_excel and archivo_csv):
             raise ValueError("Debe proporcionar las rutas de archivo válidas.")
 
+
         # Cargar el archivo Excel
         workbook = openpyxl.load_workbook(archivo_excel)
+
 
         # Seleccionar la hoja de trabajo
         worksheet = workbook.active
 
+
         # Buscar las cabeceras de las columnas
         header_row = next(worksheet.iter_rows(min_row=1, max_row=1))
         header = [cell.value for cell in header_row]
+
 
         # Obtener los índices de las columnas de interés
         indice_columnas = {}
@@ -61,26 +69,33 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                 raise ValueError(f'Cabecera no encontrada: {nombre_columna}')
             indice_columnas[columna] = header.index(nombre_columna)
 
+
         # Pedir al usuario la columna a modificar
         columnas_modificar = list(columnas.values())
 
+
         # Pedir al usuario la prioridad
         prioridad_usuario = input("Ingresa la prioridad: ")
+
 
         # Crear archivo CSV
         with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
 
+
             # Escribir cabecera
             writer.writerow([columnas[columna] for columna in columnas])
 
+
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
+
 
                 # Iterar sobre las columnas y aplicar los cambios necesarios
                 for columna_modificar in columnas_modificar:
                     # Obtener el valor actualizado de la columna
                     valor_actualizado = row[indice_columnas[columna_modificar]].value
+
 
                     # Realizar el formateo correspondiente según la columna
                     if columna_modificar == 'fecha_vencimiento':
@@ -96,6 +111,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                     elif columna_modificar == 'prioridad':
                         row[indice_columnas[columna_modificar]
                             ].value = prioridad_usuario
+
 
                 # Escribir fila actualizada en archivo CSV
                 writer.writerow(
@@ -130,4 +146,4 @@ tipos_incidencia_validos = ['Error', 'Consulta',
                             'Solicitud de mejora', 'Requerimiento']
 
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas,
-                         estados_validos, tipos_incidencia_validos)
+                        estados_validos, tipos_incidencia_validos)
