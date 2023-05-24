@@ -1,12 +1,13 @@
 # Actualización de Archivo Excel
 
-Este proyecto consiste en una utilidad para actualizar un archivo Excel y crear un archivo CSV con los cambios realizados. Permite formatear columnas específicas, como la fecha de vencimiento, el estado, el tipo de incidencia y la prioridad.
+Este proyecto consiste en una utilidad para actualizar un archivo Excel y crear un archivo CSV con los cambios realizados. Permite formatear columnas específicas, como la fecha, el estado, el tipo de incidencia y la prioridad.
 
 ## Instalación
 
 1. Clona o descarga este repositorio en tu máquina local.
 2. Asegúrate de tener Python instalado en tu sistema.
-3. Instala las dependencias necesarias ejecutando el siguiente comando:
+3. Instala las dependencias necesarias ejecutando el siguiente comando: pip install openpyxl
+
 
 ## Uso
 
