@@ -16,7 +16,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
     """
 
 
-    # Función para formatear la fecha de vencimiento
+    # Función para formatear la fecha
     def formatear_fecha_fin(fecha_fin):
         if isinstance(fecha_fin, datetime):
             return fecha_fin.strftime('%d-%m-%Y')
