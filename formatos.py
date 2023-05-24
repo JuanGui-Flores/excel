@@ -93,6 +93,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
                 # Iterar sobre las columnas y aplicar los cambios necesarios
                 for columna_modificar in columnas_modificar:
+                    
+                    
                     # Obtener el valor actualizado de la columna
                     valor_actualizado = row[indice_columnas[columna_modificar]].value
 
