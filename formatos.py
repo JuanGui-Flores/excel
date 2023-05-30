@@ -33,7 +33,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario, tipos_incidencia_validos):
         if tipo_incidencia not in tipos_incidencia_validos:
-            return "necesita mapeo"
+            return ""  # Valor predeterminado en blanco
         if tipo_incidencia == 'Tarea Planificada':
             return 'tarea'
         elif tipo_incidencia == 'Tarea no Planificada':
@@ -90,8 +90,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
                     # Verificar si la columna existe en el archivo Excel
                     if indice_columna is None:
-                        # Columna no encontrada, agregar un valor predeterminado
-                        valor_actualizado = "necesita mapeo"
+                        # Columna no encontrada, agregar un valor predeterminado en blanco
+                        valor_actualizado = ""
                     else:
                         # Obtener el valor actualizado de la columna
                         valor_actualizado = row[indice_columna].value
