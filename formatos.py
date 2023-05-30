@@ -5,7 +5,7 @@ import openpyxl
 from datetime import datetime
 
 
-def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos):
+def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos :dict [str,str], tipos_incidencia_validos):
     """
     Actualiza un archivo Excel y crea un archivo CSV con los cambios realizados.
 
@@ -26,18 +26,18 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
 
     # Función para formatear el estado
-    def formatear_estado(estado, estados_validos):
+    def formatear_estado(estado, estados_validos : dict [str,str]):
         return estados_validos.get(estado, estado)
 
 
     # Función para formatear el tipo de incidencia
-    def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario, tipos_incidencia_validos):
+    def formatear_tipo_incidencia(tipo_incidencia,  tipos_incidencia_validos):
+        print("tipo_incidencia")
+        print(tipo_incidencia)
         if tipo_incidencia not in tipos_incidencia_validos:
             return "necesita mapeo"
-        if tipo_incidencia == 'Tarea Planificada':
-            return 'tarea'
-        elif tipo_incidencia == 'Tarea no Planificada':
-            return 'subtarea'
+        else:
+            return tipos_incidencia_validos[tipo_incidencia] #simplificacion de muchos ifs con un dict
 
 
     try:
@@ -62,12 +62,12 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
         # Obtener los índices de las columnas de interés
         indice_columnas = {columna: header.index(nombre_columna) for columna, nombre_columna in columnas.items()}
+        print("indices")
+        print(indice_columnas)
 
-        # Pedir al usuario la columna a modificar
-        columnas_modificar = list(columnas.values())
-
-        # Pedir al usuario la prioridad
-        prioridad_usuario = input("Ingresa la prioridad: ")
+        ## Se realizo un cambio en esta linea ya que listaba los valores de el dict "columnas" cuando en realidad
+        ## el loop de la linea 86 deberia comparar columnas.keys en los ifs
+        columnas_modificar = list(columnas.keys())
 
         # Crear archivo CSV
         with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
@@ -84,10 +84,8 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
                 # Iterar sobre las columnas y aplicar los cambios necesarios
                 for columna_modificar in columnas_modificar:
-
                     # Obtener el índice de la columna en el archivo Excel
                     indice_columna = indice_columnas.get(columna_modificar)
-
                     # Verificar si la columna existe en el archivo Excel
                     if indice_columna is None:
                         # Columna no encontrada, agregar un valor predeterminado
@@ -95,16 +93,15 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                     else:
                         # Obtener el valor actualizado de la columna
                         valor_actualizado = row[indice_columna].value
-
+                        print(valor_actualizado)
                         # Realizar el formateo correspondiente según la columna
                         if columna_modificar == 'fecha_fin':
                             valor_actualizado = formatear_fecha_fin(valor_actualizado)
                         elif columna_modificar == 'estado':
                             valor_actualizado = formatear_estado(valor_actualizado, estados_validos)
-                        elif columna_modificar == 'tipo_incidencia' and valor_actualizado:
-                            valor_actualizado = formatear_tipo_incidencia(valor_actualizado, prioridad_usuario, tipos_incidencia_validos)
-                        elif columna_modificar == 'prioridad':
-                            valor_actualizado = prioridad_usuario
+                        elif columna_modificar == 'tipo_incidencia' :
+                            valor_actualizado = formatear_tipo_incidencia(valor_actualizado,  tipos_incidencia_validos)
+                        
 
                     # Agregar el valor actualizado a la lista de la fila actualizada
                     fila_actualizada.append(valor_actualizado)
@@ -132,11 +129,14 @@ columnas = {
     'fecha_fin': 'Fecha Fin',
     'prioridad': 'Prioridad'
 }
+
+## se cambio los valores por las keys para que la funcion formatear_estados funcione
 estados_validos = {
-    'En progreso': 'En curso',
-    'Cerrada': 'Cerrado',
-    'Abierta': 'Pendiente'
+    'EN CURSO':'En progreso' ,
+    'CERRADO':'Cerrada' ,
+    'PENDIENTE':'Abierta' 
 }
-tipos_incidencia_validos = ['Tarea Planificada', 'Tarea no Planificada']
+# transformo este arreglo en dict para simplificar la funcion de mapeo
+tipos_incidencia_validos = {'Tarea Planificada':"tarea", 'Tarea no Planificada':"subtarea"}
 
 actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos)
