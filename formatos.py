@@ -70,7 +70,7 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             writer = csv.writer(file)
 
             # Escribir cabecera
-            writer.writerow([columnas[columna] for columna in columnas])
+            writer.writerow(list(columnas.keys()))
 
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
