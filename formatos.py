@@ -17,18 +17,15 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         tipos_incidencia_validos (list): Lista de tipos de incidencia válidos en el archivo Excel.
     """
 
-
     # Función para formatear la fecha
     def formatear_fecha_fin(fecha_fin):
         if isinstance(fecha_fin, datetime):
             return fecha_fin.strftime('%d-%m-%Y')
         return fecha_fin
 
-
     # Función para formatear el estado
     def formatear_estado(estado, estados_validos):
         return estados_validos.get(estado, estado)
-
 
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario, tipos_incidencia_validos):
@@ -38,7 +35,6 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
             return 'tarea'
         elif tipo_incidencia == 'Tarea no Planificada':
             return 'subtarea'
-
 
     try:
         # Validar la existencia de los archivos
