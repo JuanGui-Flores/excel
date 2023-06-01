@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import csv
 import openpyxl
 from datetime import datetime
@@ -25,7 +23,10 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
     # Función para formatear el estado
     def formatear_estado(estado, estados_validos):
-        return estados_validos.get(estado, estado)
+        estado_formateado = estados_validos.get(estado)
+        if estado_formateado:
+            return estado_formateado
+        return estado
 
     # Función para formatear el tipo de incidencia
     def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario, tipos_incidencia_validos):
@@ -131,7 +132,8 @@ columnas = {
 estados_validos = {
     'En progreso': 'En curso',
     'Cerrada': 'Cerrado',
-    'Abierta': 'Pendiente'
+    'Abierta': 'Pendiente',
+    'Desarrollada': 'En desarrollo'
 }
 tipos_incidencia_validos = ['Tarea Planificada', 'Tarea no Planificada']
 
