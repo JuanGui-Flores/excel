@@ -130,10 +130,11 @@ columnas = {
     'prioridad': 'Prioridad'
 }
 estados_validos = {
-    'En progreso': 'En curso',
-    'Cerrada': 'Cerrado',
-    'Abierta': 'Pendiente',
-    'Desarrollada': 'En desarrollo'
+    'EN CURSO': 'En curso',
+    'PENDIENTE': 'Pendiente',
+    'PRODUCCION': 'Produccion',
+    'DESARROLLADA': 'En desarrollo',
+    'VALIDACION': 'Validacion'
 }
 tipos_incidencia_validos = ['Tarea Planificada', 'Tarea no Planificada']
 
