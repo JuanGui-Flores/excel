@@ -44,13 +44,17 @@ def formatear_estado(estado, estados_validos: dict[str, str]):
         if not (archivo_excel and archivo_csv):
             raise ValueError(
                 "Debe proporcionar las rutas de archivo válidas.")
+            
         # Cargar el archivo Excel
         workbook = openpyxl.load_workbook(archivo_excel)
+        
         # Seleccionar la hoja de trabajo
         worksheet = workbook.active
+        
         # Buscar las cabeceras de las columnas
         header_row = next(worksheet.iter_rows(min_row=1, max_row=1))
         header = [cell.value for cell in header_row]
+        
         # Verificar que las columnas de interés estén presentes en el archivo Excel
         for nombre_columna in columnas.values():
             if nombre_columna not in header:
@@ -67,13 +71,17 @@ def formatear_estado(estado, estados_validos: dict[str, str]):
 
         # Pedir al usuario la prioridad
         columnas_modificar = list(columnas.keys())
+        
         # Crear archivo CSV
         with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
+            
             # Escribir cabecera
             writer.writerow([columnas[columna] for columna in columnas])
+            
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
+                
                 # Inicializar una lista para almacenar los valores de las columnas
                 fila_actualizada = []
 
@@ -136,4 +144,4 @@ tipos_incidencia_validos = {
     'Tarea Planificada': "tarea", 'Tarea no Planificada': "subtarea"}
 
 actualizar_archivo_excel(archivo_excel, archivo_csv,
-                         columnas, estados_validos, tipos_incidencia_validos)
+                        columnas, estados_validos, tipos_incidencia_validos)
