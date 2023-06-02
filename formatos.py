@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import csv
 import openpyxl
 from datetime import datetime
 
 
-def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos):
+def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos: dict[str, str], tipos_incidencia_validos):
     """
-    Actualiza un archivo Excel y crea un archivo CSV con los cambios realizados.
 
     Args:
         archivo_excel (str): Ruta del archivo Excel a actualizar.
@@ -22,36 +23,32 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
         return fecha_fin
 
     # Función para formatear el estado
-    def formatear_estado(estado, estados_validos):
-        estado_formateado = estados_validos.get(estado)
-        if estado_formateado:
-            return estado_formateado
-        return estado
+
+
+def formatear_estado(estado, estados_validos: dict[str, str]):
+    estado_formateado = estados_validos.get(estado)
 
     # Función para formatear el tipo de incidencia
-    def formatear_tipo_incidencia(tipo_incidencia, prioridad_usuario, tipos_incidencia_validos):
+
+    def formatear_tipo_incidencia(tipo_incidencia,  tipos_incidencia_validos):
+        print("tipo_incidencia")
+        print(tipo_incidencia)
         if tipo_incidencia not in tipos_incidencia_validos:
-            return ""  # Valor predeterminado en blanco
-        if tipo_incidencia == 'Tarea Planificada':
-            return 'tarea'
-        elif tipo_incidencia == 'Tarea no Planificada':
-            return 'subtarea'
+            return "necesita mapeo"
+        else:
+            return tipos_incidencia_validos[tipo_incidencia]
 
     try:
         # Validar la existencia de los archivos
         if not (archivo_excel and archivo_csv):
             raise ValueError("Debe proporcionar las rutas de archivo válidas.")
-
         # Cargar el archivo Excel
         workbook = openpyxl.load_workbook(archivo_excel)
-
         # Seleccionar la hoja de trabajo
         worksheet = workbook.active
-
         # Buscar las cabeceras de las columnas
         header_row = next(worksheet.iter_rows(min_row=1, max_row=1))
         header = [cell.value for cell in header_row]
-
         # Verificar que las columnas de interés estén presentes en el archivo Excel
         for nombre_columna in columnas.values():
             if nombre_columna not in header:
@@ -59,23 +56,21 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
 
         # Obtener los índices de las columnas de interés
         indice_columnas = {columna: header.index(nombre_columna) for columna, nombre_columna in columnas.items()}
+        print("indices")
+        print(indice_columnas)
 
         # Pedir al usuario la columna a modificar
         columnas_modificar = list(columnas.values())
 
         # Pedir al usuario la prioridad
-        prioridad_usuario = input("Ingresa la prioridad: ")
-
+        columnas_modificar = list(columnas.keys())
         # Crear archivo CSV
         with open(archivo_csv, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-
             # Escribir cabecera
-            writer.writerow(list(columnas.keys()))
-
+            writer.writerow([columnas[columna] for columna in columnas])
             # Iterar sobre las filas y hacer los cambios necesarios
             for row in worksheet.iter_rows(min_row=2):
-
                 # Inicializar una lista para almacenar los valores de las columnas
                 fila_actualizada = []
 
@@ -91,17 +86,15 @@ def actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_valid
                         valor_actualizado = ""
                     else:
                         # Obtener el valor actualizado de la columna
-                        valor_actualizado = row[indice_columna].value
+                        print(valor_actualizado)
 
                         # Realizar el formateo correspondiente según la columna
                         if columna_modificar == 'fecha_fin':
                             valor_actualizado = formatear_fecha_fin(valor_actualizado)
                         elif columna_modificar == 'estado':
                             valor_actualizado = formatear_estado(valor_actualizado, estados_validos)
-                        elif columna_modificar == 'tipo_incidencia' and valor_actualizado:
-                            valor_actualizado = formatear_tipo_incidencia(valor_actualizado, prioridad_usuario, tipos_incidencia_validos)
-                        elif columna_modificar == 'prioridad':
-                            valor_actualizado = prioridad_usuario
+                        elif columna_modificar == 'tipo_incidencia':
+                            valor_actualizado = formatear_tipo_incidencia(valor_actualizado,  tipos_incidencia_validos)
 
                     # Agregar el valor actualizado a la lista de la fila actualizada
                     fila_actualizada.append(valor_actualizado)
@@ -130,12 +123,11 @@ columnas = {
     'prioridad': 'Prioridad'
 }
 estados_validos = {
-    'EN CURSO': 'En curso',
-    'PENDIENTE': 'Pendiente',
-    'PRODUCCION': 'Produccion',
-    'DESARROLLADA': 'En desarrollo',
-    'VALIDACION': 'Validacion'
+    'EN CURSO':'En progreso' ,
+    'CERRADO':'Cerrada' ,
+    'PENDIENTE':'Abierta' 
 }
-tipos_incidencia_validos = ['Tarea Planificada', 'Tarea no Planificada']
+tipos_incidencia_validos = {'Tarea Planificada':"tarea", 'Tarea no Planificada':"subtarea"}
 
-actualizar_archivo_excel(archivo_excel, archivo_csv, columnas, estados_validos, tipos_incidencia_validos)
+actualizar_archivo_excel(archivo_excel, archivo_csv,
+                        columnas, estados_validos, tipos_incidencia_validos)
