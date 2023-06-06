@@ -24,13 +24,10 @@ def formatear_fecha_fin(fecha_fin):
 
 
     # Función para formatear el estado
-
-
 def formatear_estado(estado, estados_validos: dict[str, str]):
     estado_formateado = estados_validos.get(estado)
 
     # Función para formatear el tipo de incidencia
-
     def formatear_tipo_incidencia(tipo_incidencia,  tipos_incidencia_validos):
         print("tipo_incidencia")
         print(tipo_incidencia)
